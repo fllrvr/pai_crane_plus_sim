@@ -1,0 +1,7 @@
+# Data (too large for git)
+dataset/
+checkpoints/
+
+# Separate repositories, cloned by following README.md
+pai_training/
+pai_ws/
