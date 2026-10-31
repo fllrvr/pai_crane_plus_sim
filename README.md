@@ -36,8 +36,10 @@ pai_crane_plus_sim/
 - `pai_training`
   - カメラ画像への対応
   - データ変換の修正
+  - Diffusion Policy の追加
 - `physicalai_teleop`
   - 箱を初期位置に戻す機能
+  - 対象の箱を本家 crane_plus の `aruco_cube_0` に変更
 
 ## セットアップ
 
@@ -60,7 +62,7 @@ docker build -t pai-ros2-camera docker/
 ```bash
 # teleop 用のワークスペースを作って physicalai_teleop を clone
 mkdir -p /workspace/pai_ws/src && cd /workspace/pai_ws/src
-git clone -b <タグ> https://github.com/fllrvr/physicalai_teleop.git
+git clone -b v1.0 https://github.com/fllrvr/physicalai_teleop.git
 
 # teleop をビルド
 cd /workspace/pai_ws && colcon build --symlink-install
@@ -71,7 +73,7 @@ cd /workspace/pai_ws && colcon build --symlink-install
 ```bash
 # pai_training を clone（LeRobot のサブモジュールも一緒に）
 cd /workspace
-git clone --recursive -b <タグ> https://github.com/fllrvr/pai_training.git
+git clone --recursive -b v1.0 https://github.com/fllrvr/pai_training.git
 
 # pixi をインストール
 curl -fsSL https://pixi.sh/install.sh | bash
