@@ -1,6 +1,8 @@
 # Data (too large for git)
-dataset/
-checkpoints/
+dataset/*
+!dataset/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
 
 # Separate repositories, cloned by following README.md
 pai_training/

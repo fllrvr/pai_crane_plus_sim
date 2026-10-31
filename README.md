@@ -4,13 +4,26 @@
 
 ## 構成
 
+このリポジトリに含まれるもの:
+
+```
+pai_crane_plus_sim/
+├── docker/
+│   ├── Dockerfile                # 自作イメージ pai-ros2-camera
+│   └── camera_position.patch     # カメラ位置の変更（本家 crane_plus に当てる）
+├── dataset/                      # データ（中身は git 管理外）
+├── checkpoints/                  # 学習済みモデル（中身は git 管理外）
+├── run_pai_camera_container.sh   # コンテナを起動する
+├── README.md
+└── .gitignore
+```
+
+セットアップで作られるもの（git 管理外）:
+
 | パス | 内容 |
 | --- | --- |
-| `docker/` | Dockerfile とカメラ位置のパッチ |
-| `run_pai_camera_container.sh` | 自作イメージ `pai-ros2-camera` でコンテナを起動する |
 | `pai_training/` | 変換・学習・推論（[fllrvr/pai_training](https://github.com/fllrvr/pai_training)、別リポジトリ） |
 | `pai_ws/` | teleop（[fllrvr/physicalai_teleop](https://github.com/fllrvr/physicalai_teleop)、別リポジトリ） |
-| `dataset/`、`checkpoints/` | データと学習済みモデル（git 管理外） |
 
 このフォルダは、コンテナ内では `/workspace` にマウントされます。
 
@@ -83,8 +96,7 @@ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py use_camera:=true
 ros2 run physicalai_teleop teleop_keyboard
 
 # 記録（1 エピソードごとに ep0、ep1、… と名前を変える）
-cd /workspace/dataset/rosbags/pick_and_move_camera
-ros2 bag record -o ep0 /joint_states \
+ros2 bag record -o /workspace/dataset/rosbags/pick_and_move_camera/ep0 /joint_states \
   /crane_plus_arm_controller/joint_trajectory \
   /crane_plus_gripper_controller/joint_trajectory \
   /image_raw
