@@ -112,8 +112,8 @@ cd /workspace/pai_training
 # rosbag を LeRobot のデータセットに変換
 pixi run convert
 
-# 学習
-pixi run train
+# 学習（wandb はオフラインで記録。loss は学習済みモデルの隣の train_log.csv と loss.png にも保存される）
+WANDB_MODE=offline pixi run train
 
 # 推論（シミュレーションを起動した状態で）
 pixi run infer --model-path <学習済みモデルのパス>
@@ -122,3 +122,12 @@ pixi run infer --model-path <学習済みモデルのパス>
 入出力のパスは `pai_training/configs/` の `conversion_config.yaml` と `train_config.yaml` で設定します。
 
 各コマンドの詳しい使い方は [fllrvr/pai_training の README](https://github.com/fllrvr/pai_training#usage) を見てください。
+
+### 学習済みモデルで推論
+
+学習済みの ACT モデルを [fllrvr/crane_plus_pick_and_move_camera_act](https://huggingface.co/fllrvr/crane_plus_pick_and_move_camera_act) で公開しています。データ収集や学習をしなくても、シミュレーションを起動した状態で推論だけ試せます。
+
+```bash
+cd /workspace/pai_training
+pixi run infer --model-path fllrvr/crane_plus_pick_and_move_camera_act
+```
