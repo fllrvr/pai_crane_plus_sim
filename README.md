@@ -13,6 +13,8 @@ pai_crane_plus_sim/
 │   └── camera_position.patch     # カメラ位置の変更（本家 crane_plus に当てる）
 ├── dataset/                      # データ（中身は git 管理外）
 ├── checkpoints/                  # 学習済みモデル（中身は git 管理外）
+├── notebooks/
+│   └── check_data.py             # （参考）収集データの集計（エピソードの長さ、停止時間）
 ├── run_pai_camera_container.sh   # コンテナを起動する
 ├── README.md
 └── .gitignore
@@ -73,7 +75,7 @@ cd /workspace/pai_ws && colcon build --symlink-install
 ```bash
 # pai_training を clone（LeRobot のサブモジュールも一緒に）
 cd /workspace
-git clone --recursive -b v1.0 https://github.com/fllrvr/pai_training.git
+git clone --recursive -b v1.1 https://github.com/fllrvr/pai_training.git
 
 # pixi をインストール
 curl -fsSL https://pixi.sh/install.sh | bash
@@ -97,7 +99,7 @@ ros2 launch crane_plus_gazebo crane_plus_with_table.launch.py use_camera:=true
 # キーボードで操作（B で箱を初期位置に戻す）
 ros2 run physicalai_teleop teleop_keyboard
 
-# 記録（1 エピソードごとに ep0、ep1、… と名前を変える）
+# 記録（1 エピソードごとに ep0、ep1、… などと名前を変える）
 ros2 bag record -o /workspace/dataset/rosbags/pick_and_move_camera/ep0 /joint_states \
   /crane_plus_arm_controller/joint_trajectory \
   /crane_plus_gripper_controller/joint_trajectory \
@@ -130,4 +132,13 @@ pixi run infer --model-path <学習済みモデルのパス>
 ```bash
 cd /workspace/pai_training
 pixi run infer --model-path fllrvr/crane_plus_pick_and_move_camera_act
+```
+
+### （参考）収集データの集計
+
+エピソードの長さと、関節・指令値が止まっている時間を集計します（変換後に実行）。データの場所は `check_data.py` の先頭で設定します。
+
+```bash
+cd /workspace/pai_training
+pixi run python /workspace/notebooks/check_data.py
 ```
